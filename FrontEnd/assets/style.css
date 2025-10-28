@@ -47,6 +47,9 @@ table {
 	border-spacing: 0;
 }
 /** end reset css**/
+
+/*********** GENERAL ***********/
+
 body {
 	max-width: 1140px;
 	margin:auto;
@@ -84,6 +87,9 @@ h2{
 	font-size: 30px;
 	color: #1D6154
 }
+
+/*********** NAVIGATION ***********/
+
 nav ul {
 	display: flex;
 	align-items: center;
@@ -98,9 +104,13 @@ nav li {
 li:hover {
 	color: #B1663C;
 }
+
+/*********** INTRODUCTION ***********/
+
 #introduction {
 	display: flex;
 	align-items: center;
+	margin-bottom: 5em;
 }
 #introduction figure {
 	flex: 1
@@ -121,10 +131,40 @@ li:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+
+/*********** PORTFOLIO ***********/
+
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
 }
+
+.filters {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: 1em;
+	margin-top: 3em;
+	margin-bottom: 2.5em;
+}
+
+.filters button {
+	color: #1D6154;
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 18px;
+	border: #1D6154 solid 1px;
+	border-radius: 10em;
+	background-color: #ffffff00;
+	padding: 0.6em 1em;
+}
+
+.filters button:active {
+	color: #ffffff;
+	background-color: #1D6154;
+}
+
 .gallery {
 	width: 100%;
 	display: grid;
@@ -137,6 +177,9 @@ li:hover {
 	width: 100%;
 
 }
+
+/*********** CONTACT ***********/
+
 #contact {
 	width: 50%;
 margin: auto;
@@ -179,6 +222,8 @@ input[type="submit"]{
 	text-align: center;
 	border-radius: 60px ;
 }
+
+/*********** FOOTER ***********/
 
 footer nav ul {
 	display: flex;

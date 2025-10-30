@@ -160,9 +160,10 @@ li:hover {
 	background-color: #ffffff00;
 	padding: 0.5em 1em;
 	transition: all 0.2s ease-in-out;
+	cursor: pointer;
 }
 
-.filters button:active {
+.filters button.active {
 	color: #ffffff;
 	background-color: #1D6154;
 }
@@ -177,7 +178,6 @@ li:hover {
 
 .gallery img {
 	width: 100%;
-
 }
 
 /*********** CONTACT ***********/

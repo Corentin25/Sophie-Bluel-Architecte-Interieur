@@ -82,4 +82,9 @@ function activeFilters() {
   activeButton(withoutFilter);
 };
 
+/* FILTERS */
+
+
+
 run();
+

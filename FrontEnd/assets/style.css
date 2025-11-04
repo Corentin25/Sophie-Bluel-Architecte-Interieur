@@ -85,7 +85,7 @@ h2{
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 30px;
-	color: #1D6154
+	color: #1D6154;
 }
 
 /*********** NAVIGATION ***********/
@@ -110,7 +110,7 @@ li a:hover {
 	color: #B1663C;
 }
 
-li span {
+.logInOut {
 	font-weight: 700;
 }
 
@@ -150,7 +150,6 @@ li img {
 
 #portfolio h2 {
 	text-align: center;
-	margin-bottom: 1em;
 }
 
 .filters {
@@ -159,7 +158,6 @@ li img {
 	justify-content: center;
 	align-items: center;
 	gap: 1em;
-	margin-top: 3em;
 	margin-bottom: 2.5em;
 }
 
@@ -292,6 +290,54 @@ input[type="submit"]:hover {
 	color: #000000;
 	margin: auto;
 	margin-top: 1.5em;
+}
+
+.error-message {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: red;
+	margin-top: 1.5em;
+}
+
+/*********** ADMIN MOOD ***********/
+
+.editionMood {
+	display: none;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background-color: #000000;
+	color: #ffffff;
+	padding: 1.5em;
+}
+
+.editionMood i {
+	margin-right: 0.5em;
+}
+
+.title-editProjects {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: 25px;
+	padding-top: 3em;
+	padding-bottom: 3em;
+}
+
+.editProjects {
+	display: none;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	color: #535353;
+	cursor: pointer;
+	gap: 3px;
 }
 
 /*********** FOOTER ***********/

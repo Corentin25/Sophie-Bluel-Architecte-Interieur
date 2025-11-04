@@ -3,9 +3,17 @@
 let data = [];
 
 async function run() {
+
   const works = await fetch("http://localhost:5678/api/works");
   data = await works.json();
   console.log("All works : ", data);
+
+  const token = localStorage.getItem("authToken");
+  if (token) {
+    console.log("Vous êtes en mode administrateur");
+    activAdminMood();
+  }
+
   genererWorks();
   activeFilters();
 }
@@ -15,9 +23,11 @@ async function run() {
 const sectionGallery = document.querySelector(".gallery");
 
 function genererWorks(arrayWorks = data) {
+
   sectionGallery.innerHTML = "";
 
   for (let i = 0; i < arrayWorks.length; i++) {
+
     const article = document.createElement("article");
     sectionGallery.appendChild(article);
 
@@ -54,6 +64,7 @@ function activeFilters() {
     const filtered = data.filter((work) => work.categoryId === 1);
     genererWorks(filtered);
     activeButton(objectFilter);
+    console.log("Objects : ", filtered);
   });
 
   const appartmentsFilter = document.createElement("button");
@@ -63,6 +74,7 @@ function activeFilters() {
     const filtered = data.filter((work) => work.categoryId === 2);
     genererWorks(filtered);
     activeButton(appartmentsFilter);
+    console.log("Appartments : ", filtered);
   });
 
   const hotelsFilter = document.createElement("button");
@@ -72,6 +84,7 @@ function activeFilters() {
     const filtered = data.filter((work) => work.categoryId === 3);
     genererWorks(filtered);
     activeButton(hotelsFilter);
+    console.log("Hotels & Restaurants : ", filtered);
   });
 
   const allbuttons = [withoutFilter, objectFilter, appartmentsFilter, hotelsFilter];
@@ -79,12 +92,37 @@ function activeFilters() {
     allbuttons.forEach((previousButton) => previousButton.classList.remove("active"));
     newButton.classList.add("active");
   };
+
   activeButton(withoutFilter);
 };
 
-/* FILTERS */
+/* ADMIN MOOD */
 
+const logOut = document.querySelector(".logInOut");
 
+function activAdminMood() {
+
+  logOut.textContent = "logout";
+  logOut.removeAttribute("href");
+  logOut.style.cursor = "pointer";
+  logOut.addEventListener("click", () => {
+    localStorage.removeItem("authToken");
+    window.location.href = "index.html";
+  });
+
+  const editionMarker = document.querySelector(".editionMood");
+  editionMarker.style.display = "flex";
+  const header = document.querySelector("header")
+  header.style.marginTop = "5.5em";
+
+  filters.style.display = "none";
+  
+  const editProjects = document.querySelector(".editProjects");
+  editProjects.style.display = "flex";
+}
 
 run();
+
+
+
 

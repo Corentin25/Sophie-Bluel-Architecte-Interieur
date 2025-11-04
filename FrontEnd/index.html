@@ -9,15 +9,20 @@
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
+	<script src="https://kit.fontawesome.com/f19312dd09.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <header>
+	<div class="editionMood">
+		<i class="fa-regular fa-pen-to-square"></i>
+		<p>Mode édition</p>
+	</div>
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
 		<ul>
 			<li><a href="index.html#projets">projets</a></li>
 			<li><a href="index.html#contact">contact</a></li>
-			<li><a href="log.html">login</a></li>
+			<li><a href="log.html" class="logInOut">login</a></li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
@@ -35,7 +40,13 @@
 		</article>
 	</section>
 	<section id="portfolio">
-		<h2 id="projets">Mes Projets</h2>
+		<div class="title-editProjects">
+			<h2 id="projets">Mes Projets</h2>
+			<div class="editProjects">
+				<i class="fa-regular fa-pen-to-square"></i>
+				<p>Modifier</p>
+			</div>
+		</div>
 		<div class="filters"></div>
 		<div class="gallery"></div>
 	</section>
@@ -60,6 +71,6 @@
 		</ul>
 	</nav>
 </footer>
-<script type="module" src="script.js"></script>
+<script type="module" src="./assets/script.js"></script>
 </body>
 </html>

@@ -99,6 +99,19 @@ function activeFilters() {
 /* ADMIN MOOD */
 
 const logOut = document.querySelector(".logInOut");
+const editionMarker = document.querySelector(".editionMood");
+const header = document.querySelector("header");
+const editProjects = document.querySelector("#editProjects");
+const overlay = document.querySelector(".overlay");
+const modal = document.querySelector(".modal");
+const topModal = document.querySelector(".topModal");
+const closeModal = document.querySelector(".fa-xmark");
+const backModal = document.querySelector(".fa-arrow-left");
+const modalH3 = document.querySelector(".modal h3");
+const removeProjects = document.querySelector(".removeProjects");
+const newProjetcForms = document.querySelector(".newProjetcForms");
+const addProject = document.querySelector(".addProject");
+const validProject = document.querySelector(".validProject");
 
 function activAdminMood() {
 
@@ -110,16 +123,54 @@ function activAdminMood() {
     window.location.href = "index.html";
   });
 
-  const editionMarker = document.querySelector(".editionMood");
   editionMarker.style.display = "flex";
-  const header = document.querySelector("header")
   header.style.marginTop = "5.5em";
-
   filters.style.display = "none";
-  
-  const editProjects = document.querySelector(".editProjects");
   editProjects.style.display = "flex";
-}
+
+  editProjects.addEventListener("click", () => {
+    overlay.style.display = "flex";
+    modalEditProject();
+  });
+
+  function modalEditProject() {
+    topModal.style.justifyContent = "flex-end";
+    backModal.style.display = "none";
+    modalH3.textContent = "Galerie photo";
+    removeProjects.style.display = "block";
+    newProjetcForms.style.display = "none";
+    validProject.style.display = "none";
+    addProject.style.display = "block";
+  };
+
+  addProject.addEventListener("click", () => {
+    modalAddProject();
+  });
+
+  function modalAddProject() {
+    topModal.style.justifyContent = "space-between";
+    backModal.style.display = "block";
+    modalH3.textContent = "Ajout photo";
+    newProjetcForms.style.display = "flex"
+    removeProjects.style.display = "none";
+    addProject.style.display = "none";
+    validProject.style.display = "block";
+  };
+
+  backModal.addEventListener("click", () => {
+    modalEditProject();
+  });
+
+  closeModal.addEventListener("click", () => {
+    overlay.style.display = "none";
+  });
+  overlay.addEventListener("click", () => {
+    overlay.style.display = "none";
+  });
+  modal.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+};
 
 run();
 

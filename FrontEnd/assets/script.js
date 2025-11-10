@@ -33,7 +33,7 @@ function genererWorks(arrayWorks = data) {
 
     const imgProject = document.createElement("img");
     imgProject.src = arrayWorks[i].imageUrl;
-    imgProject.alt = "Projet";
+    imgProject.alt = arrayWorks[i].title;
     article.appendChild(imgProject);
 
     const titleProject = document.createElement("h3");
@@ -137,10 +137,11 @@ function activAdminMood() {
     topModal.style.justifyContent = "flex-end";
     backModal.style.display = "none";
     modalH3.textContent = "Galerie photo";
-    removeProjects.style.display = "block";
+    removeProjects.style.display = "grid";
     newProjetcForms.style.display = "none";
     validProject.style.display = "none";
     addProject.style.display = "block";
+
   };
 
   addProject.addEventListener("click", () => {
@@ -170,6 +171,45 @@ function activAdminMood() {
   modal.addEventListener("click", (e) => {
     e.stopPropagation();
   });
+
+  async function miniWorks(arrayWorks = data) {
+    sectionGallery.innerHTML = "";
+
+    for (let i = 0; i < arrayWorks.length; i++) {
+
+      const imgAndTrash = document.createElement("div");
+      imgAndTrash.classList.add("imgAndTrash");
+      removeProjects.appendChild(imgAndTrash);
+
+      const imgProject = document.createElement("img");
+      imgProject.src = arrayWorks[i].imageUrl;
+      imgProject.alt = arrayWorks[i].title;
+      imgAndTrash.appendChild(imgProject);
+
+      const trashIcon = document.createElement("i");
+      trashIcon.classList.add("fa-solid", "fa-trash-can");
+      imgAndTrash.appendChild(trashIcon);
+
+      trashIcon.addEventListener("click", async () => {
+        const token = localStorage.getItem("authToken");
+
+        const confirmation = confirm("Voulez-vous vraiment supprimer ce projet ?");
+        if (!confirmation) return;
+
+        const response = await fetch(`http://localhost:5678/api/works/${arrayWorks[i].id}`, {
+          method: "DELETE",
+          headers: {Authorization: `Bearer ${token}`},
+        });
+
+        if (response.ok) {
+          imgAndTrash.remove();
+          data = data.filter((element) => element.id !== arrayWorks[i].id);
+          genererWorks(data);
+        }
+      });
+    };
+  };
+  miniWorks();
 };
 
 run();

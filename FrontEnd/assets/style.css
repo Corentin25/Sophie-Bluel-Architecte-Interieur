@@ -413,77 +413,27 @@ input[type="submit"]:hover {
 	cursor: pointer;
 }
 
-.newProjetcForms {
-	display: flex;
-	flex-direction: column;
-}
-
-.newProjetcForms div {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	width: 100%;
-	gap: 8px;
-	padding: 2em 0em;
-	margin-bottom: 0.5em;
-	background-color: #E8F1F6;
-}
-
-.newProjetcForms button {
-	border-radius: 60px;
-	border: none;
-	padding: 0.8em 3em;
-	background-color: #CBD6DC;
-	color: #306685;
-	font-size: 15px;
-	font-weight: 600;
-	transition: all 0.2s ease-in-out;
-	cursor: pointer;
-}
-
-.newProjetcForms button:hover {
-	background-color: #c9d2d7;
-	color: #4087b0;
-}
-
-.newProjetcForms p {
-	color: #444444;
-	font-size: 13px;
-}
-
-.newProjetcForms label {
-	display: flex;
-	color: #3D3D3D;
-	font-size: 15px;
-	padding-top: 1.5em;
-	padding-bottom: 1em;
-}
-
-.newProjetcForms input, select {
-	height: 50px;
-	border: none;
-	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-	color: #6C6C6C;
-}
-
-.upLineButton {
+.upLineAdd {
 	display: flex;
 	justify-content: center;
-	align-items: center;
+	align-self: center;
+	width: 100%;
+    margin: 2em 0em;
 	border-top: #B3B3B3 solid 1px;
-	padding-top: 3em;
-	margin-top: 2em;
 }
 
 .addProject {
+	display: flex;
+	justify-content: center;
+	align-self: center;
 	width: 260px;
 	font-family: 'Syne';
 	font-size: 14px;
 	font-weight: 600;
+	text-align: center;
 	color: white;
 	background-color: #1D6154;
 	padding: 1em;
-	text-align: center;
 	border-radius: 60px ;
 	border: none;
 	transition: all 0.2s ease-in-out;
@@ -494,15 +444,96 @@ input[type="submit"]:hover {
 	background-color: #0E2F28;
 }
 
+/*********** NEW PROJECT MODAL ***********/
+
+.newProjetcForms {
+	display: flex;
+	flex-direction: column;
+}
+
+.addPhoto {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	gap: 8px;
+	margin-bottom: 0.5em;
+	background-color: #E8F1F6;
+}
+
+.pictoPhoto {
+	width: 65px;
+	object-fit: contain;
+	margin-top: 1em;
+}
+
+#addPhotoLabel {
+	border-radius: 60px;
+	border: none;
+	padding: 1em 3em;
+	background-color: #CBD6DC;
+	color: #306685;
+	font-size: 15px;
+	font-weight: 600;
+	transition: all 0.2s ease-in-out;
+	cursor: pointer;
+}
+
+#addPhotoLabel:hover {
+	background-color: #c9d2d7;
+	color: #4595c4;
+}
+
+.addPhoto input {
+	display: none;
+}
+
+.addPhoto p {
+	color: #444444;
+	font-size: 13px;
+	margin-bottom: 1.5em;
+}
+
+.photoPreview {
+	width: 150px;
+	object-fit: contain;
+}
+
+.newProjetcForms label {
+	display: flex;
+	color: #3D3D3D;
+	font-size: 15px;
+	padding: 1em 0em;
+}
+
+.newProjetcForms input, select {
+	height: 50px;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	color: #6C6C6C;
+}
+
+.upLineValid {
+	display: flex;
+	justify-content: center;
+	align-self: center;
+	width: 100%;
+	margin: 2em 0em;
+	border-top: #B3B3B3 solid 1px;
+}
+
 .validProject {
+	display: flex;
+	justify-content: center;
+	align-self: center;
 	width: 260px;
 	font-family: 'Syne';
 	font-size: 14px;
 	font-weight: 600;
+	text-align: center;
 	color: white;
 	background-color: #A7A7A7;
 	padding: 1em;
-	text-align: center;
 	border-radius: 60px ;
 	border: none;
 }

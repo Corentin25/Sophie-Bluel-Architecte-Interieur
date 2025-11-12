@@ -110,6 +110,8 @@ const backModal = document.querySelector(".fa-arrow-left");
 const modalH3 = document.querySelector(".modal h3");
 const removeProjects = document.querySelector(".removeProjects");
 const newProjetcForms = document.querySelector(".newProjetcForms");
+const addPhoto = document.querySelector(".addPhoto");
+const upLineAdd = document.querySelector(".upLineAdd");
 const addProject = document.querySelector(".addProject");
 const validProject = document.querySelector(".validProject");
 
@@ -128,6 +130,8 @@ function activAdminMood() {
   filters.style.display = "none";
   editProjects.style.display = "flex";
 
+  /* Generate edit modal */
+
   editProjects.addEventListener("click", () => {
     overlay.style.display = "flex";
     modalEditProject();
@@ -140,9 +144,11 @@ function activAdminMood() {
     removeProjects.style.display = "grid";
     newProjetcForms.style.display = "none";
     validProject.style.display = "none";
-    addProject.style.display = "block";
-
+    upLineAdd.style.display = "flex";
+    addProject.style.display = "flex";
   };
+
+  /* Generate new project modal */
 
   addProject.addEventListener("click", () => {
     modalAddProject();
@@ -155,22 +161,31 @@ function activAdminMood() {
     newProjetcForms.style.display = "flex"
     removeProjects.style.display = "none";
     addProject.style.display = "none";
-    validProject.style.display = "block";
+    upLineAdd.style.display = "none";
+    validProject.style.display = "flex";
+    imagePreview();
   };
+
+  /* Switch or close modals */
 
   backModal.addEventListener("click", () => {
     modalEditProject();
+    resetAddForm();
   });
 
   closeModal.addEventListener("click", () => {
     overlay.style.display = "none";
+    resetAddForm();
   });
   overlay.addEventListener("click", () => {
     overlay.style.display = "none";
+    resetAddForm();
   });
   modal.addEventListener("click", (e) => {
     e.stopPropagation();
   });
+
+  /* Generate all works to remove */
 
   async function miniWorks(arrayWorks = data) {
     sectionGallery.innerHTML = "";
@@ -203,13 +218,54 @@ function activAdminMood() {
 
         if (response.ok) {
           imgAndTrash.remove();
-          data = data.filter((element) => element.id !== arrayWorks[i].id);
+          data = data.filter((project) => project.id !== arrayWorks[i].id);
           genererWorks(data);
         }
       });
     };
   };
   miniWorks();
+
+  /* Generate new picture project */
+
+  function imagePreview() {
+     const addPhotoInput = document.querySelector("#addPhotoInput");
+
+    addPhotoInput.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      addPhoto.querySelector("img").style.display = "none";
+      addPhoto.querySelector("label").style.display = "none";
+      addPhoto.querySelector("p").style.display = "none";
+
+      const photoPreview = document.createElement("img");
+      photoPreview.classList.add("photoPreview");
+      photoPreview.src = URL.createObjectURL(file);
+      photoPreview.alt = "Aperçu de l'image téléchargée";
+      addPhoto.appendChild(photoPreview);
+    });
+  };
+
+  /* Valid a project */
+
+  
+
+  /* Reset a project start */
+
+  function resetAddForm() {
+    const title = document.querySelector("#title");
+    const category = document.querySelector("#category");
+
+    addPhoto.innerHTML = `
+      <img src="./assets/icons/picture.png" alt="Ajouter une photo" class="pictoPhoto">
+      <label for="addPhotoInput" id="addPhotoLabel">+ Ajouter photo</label>
+      <input type="file" name="addPhotoInput" id="addPhotoInput">
+      <p>jpg, png : 4Mo max</p>
+    `;
+    title.value = "";
+    category.value = "";
+  };
 };
 
 run();

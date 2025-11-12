@@ -56,9 +56,10 @@
 				<h3>Galerie photo</h3>
 				<div class="removeProjects"></div>
 				<form action="#" method="post" class="newProjetcForms">
-					<div>
-						<img src="./assets/icons/picture.png" alt="Ajouter une photo">
-						<button type="button">+ Ajouter photo</button>
+					<div class="addPhoto">
+						<img src="./assets/icons/picture.png" alt="Ajouter une photo" class="pictoPhoto">
+						<label for="addPhotoInput" id="addPhotoLabel">+ Ajouter photo</label>
+						<input type="file" name="addPhotoInput" id="addPhotoInput">
 						<p>jpg, png : 4Mo max</p>
 					</div>
 					<label for="title">Titre</label>
@@ -66,15 +67,15 @@
 					<label for="category">Catégories :</label>
 					<select name="category" id="category">
 						<option value=""></option>
-						<option value="Objects">Objets</option>
-						<option value="Appartments">Appartements</option>
-						<option value="hotelsRestaurants">Hôtels & Restaurants</option>
+						<option value="1">Objets</option>
+						<option value="2">Appartements</option>
+						<option value="3">Hôtels & Restaurants</option>
 					</select>
+					<div class="upLineValid"></div>
+					<button type="submit" class="validProject">Valider</button>
 				</form>
-				<div class="upLineButton">
-					<button class="addProject">Ajouter une photo</button>
-					<button class="validProject">Valider</button>
-				</div>
+				<div class="upLineAdd"></div>
+				<button class="addProject">Ajouter une photo</button>
 			</div>
 		</aside>
 		<div class="filters"></div>

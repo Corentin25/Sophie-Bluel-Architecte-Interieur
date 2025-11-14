@@ -441,7 +441,7 @@ input[type="submit"]:hover {
 }
 
 .addProject:hover {
-	background-color: #0E2F28;
+	background-color: #0f4a3c;
 }
 
 /*********** NEW PROJECT MODAL ***********/
@@ -536,6 +536,25 @@ input[type="submit"]:hover {
 	padding: 1em;
 	border-radius: 60px ;
 	border: none;
+	transition: background-color 0.3s ease-in-out;
+}
+
+.validProject.active {
+  background-color: #1d6154;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.validProject.active:hover {
+	background-color: #0f4a3c;
+}
+
+.errorValidMsg {
+	display: flex;
+	justify-content: center;
+	font-size: 13px;
+	color: #ff8934;
+	margin-top: 1.5em;
 }
 
 /*********** FOOTER ***********/

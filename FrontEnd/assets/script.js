@@ -25,7 +25,6 @@ const sectionGallery = document.querySelector(".gallery");
 function genererWorks(arrayWorks = data) {
 
   sectionGallery.innerHTML = "";
-
   for (let i = 0; i < arrayWorks.length; i++) {
 
     const article = document.createElement("article");
@@ -143,7 +142,6 @@ function activAdminMood() {
     modalH3.textContent = "Galerie photo";
     removeProjects.style.display = "grid";
     newProjetcForms.style.display = "none";
-    validProject.style.display = "none";
     upLineAdd.style.display = "flex";
     addProject.style.display = "flex";
   };
@@ -155,32 +153,48 @@ function activAdminMood() {
   });
 
   function modalAddProject() {
+    document.querySelector("#title").addEventListener("input", validButtonOk);
+    document.querySelector("#category").addEventListener("change", validButtonOk);
+    document.querySelector("#addPhotoInput").addEventListener("change", validButtonOk);
     topModal.style.justifyContent = "space-between";
     backModal.style.display = "block";
     modalH3.textContent = "Ajout photo";
     newProjetcForms.style.display = "flex"
     removeProjects.style.display = "none";
-    addProject.style.display = "none";
     upLineAdd.style.display = "none";
-    validProject.style.display = "flex";
+    addProject.style.display = "none";
     imagePreview();
   };
 
   /* Switch or close modals */
 
   backModal.addEventListener("click", () => {
+    const errorMessage = document.querySelector(".errorValidMsg");
+    if (errorMessage) {
+      errorMessage.remove();
+    };
     modalEditProject();
     resetAddForm();
   });
 
   closeModal.addEventListener("click", () => {
     overlay.style.display = "none";
+    const errorMessage = document.querySelector(".errorValidMsg");
+    if (errorMessage) {
+      errorMessage.remove();
+    };
     resetAddForm();
   });
+
   overlay.addEventListener("click", () => {
     overlay.style.display = "none";
+    const errorMessage = document.querySelector(".errorValidMsg");
+    if (errorMessage) {
+      errorMessage.remove();
+    };
     resetAddForm();
   });
+
   modal.addEventListener("click", (e) => {
     e.stopPropagation();
   });
@@ -191,7 +205,6 @@ function activAdminMood() {
     sectionGallery.innerHTML = "";
 
     for (let i = 0; i < arrayWorks.length; i++) {
-
       const imgAndTrash = document.createElement("div");
       imgAndTrash.classList.add("imgAndTrash");
       removeProjects.appendChild(imgAndTrash);
@@ -220,6 +233,7 @@ function activAdminMood() {
           imgAndTrash.remove();
           data = data.filter((project) => project.id !== arrayWorks[i].id);
           genererWorks(data);
+          alert("Projet supprimé avec succès !");
         }
       });
     };
@@ -229,7 +243,7 @@ function activAdminMood() {
   /* Generate new picture project */
 
   function imagePreview() {
-     const addPhotoInput = document.querySelector("#addPhotoInput");
+    const addPhotoInput = document.querySelector("#addPhotoInput");
 
     addPhotoInput.addEventListener("change", (event) => {
       const file = event.target.files[0];
@@ -247,9 +261,95 @@ function activAdminMood() {
     });
   };
 
+  /* Load category from API */
+
+  async function loadCategories() {
+    const categorySelected = document.querySelector("#category");
+
+    const response = await fetch("http://localhost:5678/api/categories");
+    const categories = await response.json();
+
+    categorySelected.innerHTML = '<option value=""></option>';
+    categories.forEach((ctg) => {
+      const option = document.createElement("option");
+      option.value = ctg.id;
+      option.textContent = ctg.name;
+      categorySelected.appendChild(option);
+    });
+  };
+  loadCategories();
+
   /* Valid a project */
 
-  
+  newProjetcForms.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const token = localStorage.getItem("authToken");
+    const title = document.querySelector("#title").value.trim();
+    const category = document.querySelector("#category").value;
+    const image = document.querySelector("#addPhotoInput").files[0];
+
+    if (!image || !title || !category) {
+      displayError();
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("title", title);
+    formData.append("category", category);
+
+    const response = await fetch("http://localhost:5678/api/works", {
+      method: "POST",
+      headers: {Authorization: `Bearer ${token}`,},
+      body: formData,
+    });
+
+    if (response.ok) {
+      const newWork = await response.json();
+      console.log("Nouveau projet ajouté :", newWork);
+
+      data.push(newWork);
+      genererWorks(data);
+      resetAddForm();
+      window.location.href = "index.html";
+      alert("Projet ajouté avec succès !");
+    };
+
+  });
+
+  function validButtonOk() {
+    const title = document.querySelector("#title").value.trim();
+    const category = document.querySelector("#category").value;
+    const image = document.querySelector("#addPhotoInput").files[0];
+
+    const validInput = title && category && image;
+
+    if (validInput) {
+      validProject.disabled = false;
+      validProject.classList.add("active");
+      displayError(false);
+    } else {
+      validProject.disabled = true;
+      validProject.classList.remove("active");
+      displayError(true);
+    };
+  };
+
+  function displayError(visible = true) {
+    let errorMessage = document.querySelector(".errorValidMsg");
+
+    if (visible) {
+      if (!errorMessage) {
+        errorMessage = document.createElement("p");
+        errorMessage.classList.add("errorValidMsg");
+        newProjetcForms.appendChild(errorMessage);
+      }
+      errorMessage.textContent = "Attention : Tous les champs du formulaire doivent être complétés afin de pouvoir le valider.";
+    } else {
+      if (errorMessage) errorMessage.remove();
+    };
+  };
 
   /* Reset a project start */
 
@@ -265,11 +365,8 @@ function activAdminMood() {
     `;
     title.value = "";
     category.value = "";
+    validProject.classList.remove("active");
   };
 };
 
 run();
-
-
-
-

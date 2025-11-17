@@ -9,6 +9,8 @@ Ce repo git contient les 2 briques logicielles du projet
 - Backend
 
 ## Pour le lancer le code
+https://corentin25.github.io/Sophie-Bluel-Architecte-Interieur/FrontEnd/index.html
+
 ### Backend
 Ouvrir le dossier Backend et lire le README.md
 

@@ -1,28 +1,40 @@
 /* DATA RETRIEVAL AND RUN */
 
-let data = [];
+let dataWorks = [];
 
 async function run() {
 
-  const works = await fetch("http://localhost:5678/api/works");
-  data = await works.json();
-  console.log("All works : ", data);
+  try {
+    const works = await fetch("http://localhost:5678/api/works");
+    
+    if (!works.ok) {
+      throw new Error(`Erreur HTTP ! statut : ${works.status}`);
+    };
 
-  const token = localStorage.getItem("authToken");
-  if (token) {
-    console.log("Vous êtes en mode administrateur");
-    activAdminMood();
-  }
+    dataWorks = await works.json();
+    console.log("All works : ", dataWorks);
 
-  genererWorks();
-  activeFilters();
-}
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      console.log("Vous êtes en mode administrateur");
+      activAdminMood();
+    };
+
+    genererWorks();
+    activeFilters();
+
+  } catch (error) {
+    console.error("Impossible de charger les projets :", error);
+    const sectionGallery = document.querySelector(".gallery");
+    sectionGallery.innerHTML = "<p>Une erreur est survenue lors du chargement des projets. Veuillez réessayer plus tard.</p>";
+  };
+};
 
 /* GENERATE ALL WORKS */
 
 const sectionGallery = document.querySelector(".gallery");
 
-function genererWorks(arrayWorks = data) {
+function genererWorks(arrayWorks = dataWorks) {
 
   sectionGallery.innerHTML = "";
   for (let i = 0; i < arrayWorks.length; i++) {
@@ -36,9 +48,9 @@ function genererWorks(arrayWorks = data) {
     article.appendChild(imgProject);
 
     const titleProject = document.createElement("h3");
+    titleProject.classList.add("titleProject");
     titleProject.innerText = arrayWorks[i].title;
     article.appendChild(titleProject);
-    titleProject.style.padding = "1em 0em";
   }
 }
 
@@ -47,6 +59,10 @@ function genererWorks(arrayWorks = data) {
 const filters = document.querySelector(".filters");
 
 function activeFilters() {
+
+  const CATEGORY_OBJECTS = 1;
+  const CATEGORY_APARTMENTS = 2;
+  const CATEGORY_HOTELS = 3;
 
   const withoutFilter = document.createElement("button");
   withoutFilter.textContent = "Tous";
@@ -60,7 +76,7 @@ function activeFilters() {
   objectFilter.textContent = "Objets";
   filters.appendChild(objectFilter);
   objectFilter.addEventListener("click", () => {
-    const filtered = data.filter((work) => work.categoryId === 1);
+    const filtered = dataWorks.filter((work) => work.categoryId === CATEGORY_OBJECTS);
     genererWorks(filtered);
     activeButton(objectFilter);
     console.log("Objects : ", filtered);
@@ -70,7 +86,7 @@ function activeFilters() {
   appartmentsFilter.textContent = "Appartements";
   filters.appendChild(appartmentsFilter);
   appartmentsFilter.addEventListener("click", () => {
-    const filtered = data.filter((work) => work.categoryId === 2);
+    const filtered = dataWorks.filter((work) => work.categoryId === CATEGORY_APARTMENTS);
     genererWorks(filtered);
     activeButton(appartmentsFilter);
     console.log("Appartments : ", filtered);
@@ -80,7 +96,7 @@ function activeFilters() {
   hotelsFilter.textContent = "Hôtels & Restaurants";
   filters.appendChild(hotelsFilter);
   hotelsFilter.addEventListener("click", () => {
-    const filtered = data.filter((work) => work.categoryId === 3);
+    const filtered = dataWorks.filter((work) => work.categoryId === CATEGORY_HOTELS);
     genererWorks(filtered);
     activeButton(hotelsFilter);
     console.log("Hotels & Restaurants : ", filtered);
@@ -100,7 +116,7 @@ function activeFilters() {
 const logOut = document.querySelector(".logInOut");
 const editionMarker = document.querySelector(".editionMood");
 const header = document.querySelector("header");
-const editProjects = document.querySelector("#editProjects");
+const editProjects = document.getElementById("editProjects");
 const overlay = document.querySelector(".overlay");
 const modal = document.querySelector(".modal");
 const topModal = document.querySelector(".topModal");
@@ -153,9 +169,9 @@ function activAdminMood() {
   });
 
   function modalAddProject() {
-    document.querySelector("#title").addEventListener("input", validButtonOk);
-    document.querySelector("#category").addEventListener("change", validButtonOk);
-    document.querySelector("#addPhotoInput").addEventListener("change", validButtonOk);
+    document.getElementById("title").addEventListener("input", validButtonOk);
+    document.getElementById("category").addEventListener("change", validButtonOk);
+    document.getElementById("addPhotoInput").addEventListener("change", validButtonOk);
     topModal.style.justifyContent = "space-between";
     backModal.style.display = "block";
     modalH3.textContent = "Ajout photo";
@@ -199,10 +215,10 @@ function activAdminMood() {
     e.stopPropagation();
   });
 
-  /* Generate all works to remove */
+ /* Generate all works to remove */
 
-  async function miniWorks(arrayWorks = data) {
-    sectionGallery.innerHTML = "";
+  async function miniWorks(arrayWorks = dataWorks) {
+    removeProjects.innerHTML = "";
 
     for (let i = 0; i < arrayWorks.length; i++) {
       const imgAndTrash = document.createElement("div");
@@ -224,16 +240,21 @@ function activAdminMood() {
         const confirmation = confirm("Voulez-vous vraiment supprimer ce projet ?");
         if (!confirmation) return;
 
-        const response = await fetch(`http://localhost:5678/api/works/${arrayWorks[i].id}`, {
-          method: "DELETE",
-          headers: {Authorization: `Bearer ${token}`},
-        });
-
-        if (response.ok) {
-          imgAndTrash.remove();
-          data = data.filter((project) => project.id !== arrayWorks[i].id);
-          genererWorks(data);
-          alert("Projet supprimé avec succès !");
+        try {
+            const response = await fetch(`http://localhost:5678/api/works/${arrayWorks[i].id}`, {
+              method: "DELETE",
+              headers: {Authorization: `Bearer ${token}`},
+            });
+    
+            if (response.ok) {
+              imgAndTrash.remove();
+              dataWorks = dataWorks.filter((project) => project.id !== arrayWorks[i].id);
+              genererWorks(dataWorks);
+              alert("Projet supprimé avec succès !");
+            }
+        } catch (error) {
+            console.error("Erreur lors de la suppression :", error);
+            alert("Erreur de connexion lors de la suppression.");
         }
       });
     };
@@ -243,11 +264,25 @@ function activAdminMood() {
   /* Generate new picture project */
 
   function imagePreview() {
-    const addPhotoInput = document.querySelector("#addPhotoInput");
+    const addPhotoInput = document.getElementById("addPhotoInput");
+    const maxFileSize = 4 * 1024 * 1024;
+    const validFileTypes = ["image/jpeg", "image/png"];
 
     addPhotoInput.addEventListener("change", (event) => {
       const file = event.target.files[0];
       if (!file) return;
+
+      if (file.size > maxFileSize) {
+        alert("Attention, leLe fichier est trop volumineux. La taille maximale est de 4 Mo.");
+        event.target.value = "";
+        return;
+      }
+
+      if (!validFileTypes.includes(file.type)) {
+        alert("Format de fichier invalide. Veuillez sélectionner une image JPG ou PNG.");
+        event.target.value = "";
+        return;
+      }
 
       addPhoto.querySelector("img").style.display = "none";
       addPhoto.querySelector("label").style.display = "none";
@@ -264,18 +299,29 @@ function activAdminMood() {
   /* Load category from API */
 
   async function loadCategories() {
-    const categorySelected = document.querySelector("#category");
+    const categorySelected = document.getElementById("category");
 
-    const response = await fetch("http://localhost:5678/api/categories");
-    const categories = await response.json();
+    try {
+      const response = await fetch("http://localhost:5678/api/categories");
 
-    categorySelected.innerHTML = '<option value=""></option>';
-    categories.forEach((ctg) => {
-      const option = document.createElement("option");
-      option.value = ctg.id;
-      option.textContent = ctg.name;
-      categorySelected.appendChild(option);
-    });
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP ! statut : ${response.status}`);
+      }
+
+      const categories = await response.json();
+
+      categorySelected.innerHTML = '<option value=""></option>';
+      categories.forEach((ctg) => {
+        const option = document.createElement("option");
+        option.value = ctg.id;
+        option.textContent = ctg.name;
+        categorySelected.appendChild(option);
+      });
+
+    } catch (error) {
+      console.error("Erreur lors du chargement des catégories :", error);
+      categorySelected.innerHTML = '<option value="">Erreur de chargement</option>';
+    }
   };
   loadCategories();
 
@@ -285,9 +331,9 @@ function activAdminMood() {
     event.preventDefault();
 
     const token = localStorage.getItem("authToken");
-    const title = document.querySelector("#title").value.trim();
-    const category = document.querySelector("#category").value;
-    const image = document.querySelector("#addPhotoInput").files[0];
+    const title = document.getElementById("title").value.trim();
+    const category = document.getElementById("category").value;
+    const image = document.getElementById("addPhotoInput").files[0];
 
     if (!image || !title || !category) {
       displayError();
@@ -309,19 +355,20 @@ function activAdminMood() {
       const newWork = await response.json();
       console.log("Nouveau projet ajouté :", newWork);
 
-      data.push(newWork);
-      genererWorks(data);
+      dataWorks.push(newWork);
+      genererWorks(dataWorks);
+      miniWorks();
       resetAddForm();
-      window.location.href = "index.html";
       alert("Projet ajouté avec succès !");
+      overlay.style.display = "none";
     };
 
   });
 
   function validButtonOk() {
-    const title = document.querySelector("#title").value.trim();
-    const category = document.querySelector("#category").value;
-    const image = document.querySelector("#addPhotoInput").files[0];
+    const title = document.getElementById("title").value.trim();
+    const category = document.getElementById("category").value;
+    const image = document.getElementById("addPhotoInput").files[0];
 
     const validInput = title && category && image;
 
@@ -354,8 +401,8 @@ function activAdminMood() {
   /* Reset a project start */
 
   function resetAddForm() {
-    const title = document.querySelector("#title");
-    const category = document.querySelector("#category");
+    const title = document.getElementById("title");
+    const category = document.getElementById("category");
 
     addPhoto.innerHTML = `
       <img src="./assets/icons/picture.png" alt="Ajouter une photo" class="pictoPhoto">

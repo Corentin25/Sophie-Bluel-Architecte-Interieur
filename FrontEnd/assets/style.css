@@ -120,12 +120,13 @@ li a:hover {
 	color: #B1663C;
 }
 
-.logInOut {
+li span {
 	font-weight: 700;
 }
 
 li img {
 	width: 65%;
+	cursor: pointer;
 }
 
 /*********** INTRODUCTION ***********/
@@ -202,6 +203,9 @@ li img {
 
 .gallery img {
 	width: 100%;
+}
+.titleProject {
+	padding: 1em 0em;
 }
 
 /*********** CONTACT ***********/
@@ -408,6 +412,11 @@ input[type="submit"]:hover {
 	grid-row-gap: 15px;
 	width: 100%;
 	box-sizing: border-box;
+	overflow-y: scroll;
+}
+
+.imgAndTrash {
+	display: flex;
 }
 
 .imgAndTrash img {
@@ -416,12 +425,12 @@ input[type="submit"]:hover {
 }
 
 .imgAndTrash i {
-	position: absolute;
+	height: fit-content;
 	border-radius: 0.2em;
 	color: #ffffff;
 	background-color: #000000;
-	padding: 0.2em;
-	margin-left: -2em;
+	padding: 0.3em 0.15em;
+	margin-left: -1.9em;
 	margin-top: 0.4em;
 	cursor: pointer;
 }
